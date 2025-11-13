@@ -1,0 +1,45 @@
+import pandas as pd
+import matplotlib.pyplot as plt
+
+# Configurações iniciais
+valor_inicial = 50.0
+taxa_crescimento = 0.03  # 3%
+n = 100  # quantidade de períodos
+
+# Listas para armazenar os dados
+valores_base = [valor_inicial]
+acrescimos = [0]
+
+# Gerar os valores com crescimento fixo de 3%
+for i in range(1, n):
+    novo_valor = valores_base[-1] * (1 + taxa_crescimento)
+    valores_base.append(round(novo_valor, 2))
+    acrescimos.append(round(novo_valor - valores_base[-2], 2))
+
+# Criar o DataFrame
+df = pd.DataFrame({
+    'Período': range(1, n + 1),
+    'Valor Base (R$)': valores_base,
+    'Acréscimo (R$)': acrescimos,
+    'Valor Total (R$)': valores_base
+})
+
+# Mostrar primeiras linhas
+print(df.head(10))
+
+# Estatísticas dos acréscimos
+print("\nResumo estatístico dos acréscimos:")
+print(df['Acréscimo (R$)'].describe())
+
+# Salvar em CSV
+df.to_csv('simulacao_3porcento.csv', index=False, encoding='utf-8-sig')
+print("\nArquivo 'simulacao_3porcento.csv' gerado com sucesso!")
+
+# Gráfico da evolução
+plt.figure(figsize=(10,5))
+plt.plot(df['Período'], df['Valor Total (R$)'], marker='o')
+plt.title('Evolução dos Valores com Crescimento Fixo de 3%')
+plt.xlabel('Período')
+plt.ylabel('Valor Total (R$)')
+plt.grid(True)
+plt.show()
